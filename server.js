@@ -23,8 +23,10 @@ app.use((req, res, next) => {
   console.log(`${delta}`);
 });
 
+app.use(express.json());
+
 app.get("/", (req, res) => {
-  res.send("Hellooo Devanshu god is with you work hard");
+  res.send("Hellooo! How's it going??");
 });
 app.get("/friends", (req, res) => {
   res.status(200).json(friends);
@@ -43,8 +45,24 @@ app.get("/friends/:friend_id", (req, res) => {
   }
 });
 
+app.post("/friends", (req, res) => {
+  if (!req.body.name) {
+    return res.status(400).json({
+      error: "missing fiend name",
+    });
+  }
+
+  const input_friend = {
+    name: req.body.name,
+    id: friends.length,
+  };
+  friends.push(input_friend);
+
+  res.status(200).json(friends);
+});
+
 app.get("/messages", (req, res) => {
-  res.send("<ul><li>Hello Shri krishna</li></ul>");
+  res.send("<ul><li>Hello these are messages</li></ul>");
 });
 
 app.post("/messages", (req, res) => {
