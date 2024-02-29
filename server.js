@@ -7,17 +7,7 @@ const app = express();
 
 const PORT = 3000;
 
-const friends = [
-  {
-    id: 0,
-    name: "Albert Einstein",
-  },
-  {
-    id: 1,
-    name: "Sir Isaac Newton",
-  },
-];
-
+//middleware 1
 app.use((req, res, next) => {
   const start = Date.now();
   console.log(`${req.method} ${req.url}`);
@@ -26,44 +16,22 @@ app.use((req, res, next) => {
   console.log(`${delta}`);
 });
 
+//middleware 2
 app.use(express.json());
 
+//server
 app.get("/", (req, res) => {
   res.send("Hellooo! How's it going??");
 });
-app.get("/friends", (req, res) => {
-  res.status(200).json(friends);
-  const url = req.url;
-});
 
-app.get("/friends/:friend_id", (req, res) => {
-  const friend_id = Number(req.params.friend_id);
-  const friend = friends[friend_id];
-  if (friend) {
-    res.status(200).json(friend);
-  } else {
-    res.status(404).json({
-      error: "Friend does not exist",
-    });
-  }
-});
+//Friends endpoints
+app.get("/friends", friendsController.getFriends);
 
-app.post("/friends", (req, res) => {
-  if (!req.body.name) {
-    return res.status(400).json({
-      error: "missing fiend name",
-    });
-  }
+app.get("/friends/:friend_id", friendsController.getFriends_byID);
 
-  const input_friend = {
-    name: req.body.name,
-    id: friends.length,
-  };
-  friends.push(input_friend);
+app.post("/friends", friendsController.postFriends);
 
-  res.status(200).json(friends);
-});
-
+//Messages endpoints
 app.get("/messages", messagesController.getMessages);
 
 app.post("/messages", messagesController.postMessages);

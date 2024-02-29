@@ -4,6 +4,7 @@ function getMessages(req, res) {
 
 function postMessages(req, res) {
   console.log("Updating messages...");
+  res.status(200);
 }
 
 module.exports = {
