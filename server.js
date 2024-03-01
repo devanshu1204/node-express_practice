@@ -1,7 +1,8 @@
 const express = require("express");
 
 const messagesController = require("./controllers/messages.controller");
-const friendsController = require("./controllers/friends.controller");
+const friends_router = require("./routes/friends.router");
+const messages_router = require("./routes/messages.router");
 
 const app = express();
 
@@ -19,22 +20,18 @@ app.use((req, res, next) => {
 //middleware 2
 app.use(express.json());
 
+app.use("/friends", friends_router);
+
+app.use("/messages", messages_router);
+
 //server
 app.get("/", (req, res) => {
   res.send("Hellooo! How's it going??");
 });
 
 //Friends endpoints
-app.get("/friends", friendsController.getFriends);
-
-app.get("/friends/:friend_id", friendsController.getFriends_byID);
-
-app.post("/friends", friendsController.postFriends);
 
 //Messages endpoints
-app.get("/messages", messagesController.getMessages);
-
-app.post("/messages", messagesController.postMessages);
 
 app.listen(PORT, () => {
   console.log("Server is listening on Port 3000");
